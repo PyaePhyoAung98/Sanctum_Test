@@ -34,7 +34,9 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = auth()->user();
 
-            $token = $user->createToken('Laravel-8', ['user:list']);//user:list -> To use permission//optional|| Laravel-8 is token name
+            //user:list -> To use permission//optional|| Laravel-8 is token name
+            
+            $token = $user->createToken('Laravel-8', ['user:list']);
 
             return response()->json([
                 'status' => 200,
@@ -67,5 +69,12 @@ class AuthController extends Controller
             'message' => 'Successfully Login!',
             'data' => $user
         ]);
+    }
+    public function logout()
+    {
+        $user = auth()->user();
+        $user->tokens()->delete();
+        return response()->json(['status'=>200,'message'=>'Logout']);
+
     }
 }
